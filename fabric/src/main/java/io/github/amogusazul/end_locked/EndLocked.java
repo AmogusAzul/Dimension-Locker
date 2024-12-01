@@ -1,7 +1,5 @@
 package io.github.amogusazul.end_locked;
 
-import io.github.amogusazul.end_locked.CommonClass;
-import io.github.amogusazul.end_locked.Constants;
 import net.fabricmc.api.ModInitializer;
 
 public class EndLocked implements ModInitializer {
@@ -15,5 +13,7 @@ public class EndLocked implements ModInitializer {
 
         // Use Fabric to bootstrap the Common mod.
         CommonClass.init();
+
+
     }
 }

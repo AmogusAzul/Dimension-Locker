@@ -1,13 +1,13 @@
 package io.github.amogusazul.end_locked.platform;
 
+import io.github.amogusazul.end_locked.platform.services.CommonRegistry;
 
 import java.util.ServiceLoader;
 
-// Service loaders are a built-in Java feature that allow us to locate implementations of an interface that vary from one
-// environment to another. In the context of MultiLoader we use this feature to access a mock API in the common code that
-// is swapped out for the platform specific implementation at runtime.
 public class Services {
 
+    public static final CommonRegistry COMMON_REGISTRY = load(
+            CommonRegistry.class);
 
     private Services() {
         throw new UnsupportedOperationException();

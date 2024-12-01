@@ -1,11 +1,13 @@
 package io.github.amogusazul.end_locked;
 
 
-import io.github.amogusazul.end_locked.CommonClass;
-import io.github.amogusazul.end_locked.Constants;
-import io.github.amogusazul.end_locked.platform.NeoForgePlatformHelper;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+import static io.github.amogusazul.end_locked.platform.NeoForgeCommonRegistry.ITEMS;
 
 @Mod(Constants.MOD_ID)
 public class EndLocked {
@@ -17,6 +19,7 @@ public class EndLocked {
         // project.
 
         CommonClass.init();
+        ITEMS.register(eventBus);
 
     }
 }
