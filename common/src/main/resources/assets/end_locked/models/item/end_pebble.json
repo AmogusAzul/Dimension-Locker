@@ -1,0 +1,8 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "end_locked:item/pebble_base",
+	"textures": {
+		"0": "end_locked:item/end_pebble",
+		"particle": "end_locked:item/end_pebble"
+	}
+}
