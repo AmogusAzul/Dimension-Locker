@@ -8,8 +8,8 @@
         "${mod_author}"
     ],
     "contact": {
-        "homepage": "https://modrinth.com/mod/end-locked/",
-        "sources": "https://github.com/FabricMC/fabric-example-mod"
+        "homepage": "https://modrinth.com/mod/dimension-locker/",
+        "sources": "https://github.com/AmogusAzul/Dimension-Locker"
     },
     "license": "${license}",
     "icon": "${mod_id}.png",
