@@ -1,0 +1,7 @@
+{
+	"parent": "dimension_locker:item/pebble_base",
+	"textures": {
+		"0": "dimension_locker:item/end_pebble",
+		"particle": "dimension_locker:item/end_pebble"
+	}
+}

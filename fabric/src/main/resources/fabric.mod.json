@@ -16,7 +16,7 @@
     "environment": "*",
     "entrypoints": {
         "main": [
-            "io.github.amogusazul.end_locked.EndLocked"
+            "io.github.amogusazul.dimension_locker.DimensionLocker"
         ]
     },
     "mixins": [
