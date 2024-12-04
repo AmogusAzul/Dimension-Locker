@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "end_locked:nether_pebble",
+    "end_locked:end_pebble"
+  ]
+}
