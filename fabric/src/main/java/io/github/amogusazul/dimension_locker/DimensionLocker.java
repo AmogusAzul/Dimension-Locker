@@ -14,6 +14,5 @@ public class DimensionLocker implements ModInitializer {
         // Use Fabric to bootstrap the Common mod.
         CommonClass.init();
 
-
     }
 }
