@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "end_locked:nether_pebble",
-    "end_locked:end_pebble"
+    "dimension_locker:nether_pebble",
+    "dimension_locker:end_pebble"
   ]
 }
