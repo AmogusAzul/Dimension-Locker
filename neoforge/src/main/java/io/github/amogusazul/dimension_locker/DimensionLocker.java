@@ -14,8 +14,11 @@ public class DimensionLocker {
         // to load your mod. You can access NeoForge and Common code in this
         // project.
 
+        NeoForgeCommonRegistry.DATA_COMPONENT_TYPES.register(eventBus);
+
         CommonClass.init();
         NeoForgeCommonRegistry.ITEMS.register(eventBus);
+
 
     }
 }

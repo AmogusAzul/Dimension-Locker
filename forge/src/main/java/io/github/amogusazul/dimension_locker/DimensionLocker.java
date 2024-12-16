@@ -18,7 +18,7 @@ public class DimensionLocker {
 
         // Use Forge to bootstrap the Common mod.
         CommonClass.init();
-        ForgeCommonRegistry.loadItems(modEventBus);
+        ForgeCommonRegistry.loadRegistries(modEventBus);
 
     }
 }
