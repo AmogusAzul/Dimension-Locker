@@ -1,6 +1,7 @@
 package io.github.amogusazul.dimension_locker.registry;
 
 import io.github.amogusazul.dimension_locker.platform.Services;
+import io.github.amogusazul.dimension_locker.platform.services.CommonRegistry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.item.Item;
 
@@ -22,7 +23,7 @@ public interface CommonRegistryInterface {
         return Services.COMMON_REGISTRY.registerItem(itemName, itemBuilder, properties);
     }
 
-    static <T> DataComponentType<T> registerDataComponent(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
+    static <T> Supplier<DataComponentType<T>> registerDataComponent(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
         return Services.COMMON_REGISTRY.registerDataComponent(name, builderOperator);
     }
 }

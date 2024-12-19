@@ -35,13 +35,32 @@ public class FabricCommonRegistry implements CommonRegistry {
     }
 
     @Override
-    public <T> DataComponentType<T> registerDataComponent(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
-        return Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE,
+    public <T> Supplier<DataComponentType<T>> registerDataComponent(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
+
+        DataComponentType<T> dc = Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE,
                 ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name),
                 builderOperator.apply(DataComponentType.builder()).build());
+
+        return new DataComponentSupplier<>(dc);
     }
 
     private static ResourceKey<Item> createItemId(String id) {
         return ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, id));
     }
+
+    static class DataComponentSupplier<T> implements Supplier<DataComponentType<T>> {
+
+        DataComponentType<T> content;
+
+        public DataComponentSupplier(DataComponentType<T> component){
+            content = component;
+
+        }
+
+        @Override
+        public DataComponentType<T> get() {
+            return content;
+        }
+    }
+
 }
