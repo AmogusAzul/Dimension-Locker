@@ -1,7 +1,10 @@
 package io.github.amogusazul.dimension_locker.platform;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.github.amogusazul.dimension_locker.platform.services.CommonRegistry;
 import io.github.amogusazul.dimension_locker.Constants;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -31,6 +34,13 @@ public class FabricCommonRegistry implements CommonRegistry {
         return () -> Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE,
                 ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name),
                 builderOperator.apply(DataComponentType.builder()).build());
+    }
+
+    @Override
+    public void registerCommand(LiteralArgumentBuilder<CommandSourceStack> command) {
+        CommandRegistrationCallback.EVENT.register(
+                (dispatcher, registryAccess, environment) -> dispatcher.register(command)
+        );
     }
 
     }
