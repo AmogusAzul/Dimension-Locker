@@ -1,7 +1,6 @@
 package io.github.amogusazul.dimension_locker;
 
 import io.github.amogusazul.dimension_locker.data_component.DimensionLockerDataComponents;
-import io.github.amogusazul.dimension_locker.item.DimensionLockerItems;
 
 // This class is part of the common project meaning it is shared between all supported loaders. Code written here can only
 // import and access the vanilla codebase, libraries used by vanilla, and optionally third party libraries that provide
@@ -13,7 +12,6 @@ public class CommonClass {
     // write the majority of your code here and load it from your loader specific projects. This example has some
     // code that gets invoked by the entry point of the loader specific projects.
     public static void init() {
-            DimensionLockerItems.loadItems();
             DimensionLockerDataComponents.registerDataComponentTypes();
     }
 }

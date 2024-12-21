@@ -17,21 +17,12 @@ import java.util.function.UnaryOperator;
 
 public class FabricCommonRegistry implements CommonRegistry {
 
+
     private static <T, R extends Registry<? super T>> Supplier<T> registerSupplier(R registry, String id, Supplier<T> object) {
         final T registeredObject = Registry.register((Registry<T>) registry,
                 ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, id), object.get());
 
         return () -> registeredObject;
-    }
-
-    @Override
-    public <T extends Item> Supplier<T> registerItem(String itemName, Function<Item.Properties, T> function, Item.Properties properties) {
-
-
-
-        ResourceKey<Item> itemId = createItemId(itemName);
-
-        return registerSupplier(BuiltInRegistries.ITEM, itemName, () -> function.apply(properties.setId(itemId)));
     }
 
     @Override
@@ -42,8 +33,6 @@ public class FabricCommonRegistry implements CommonRegistry {
                 builderOperator.apply(DataComponentType.builder()).build());
     }
 
-    private static ResourceKey<Item> createItemId(String id) {
-        return ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, id));
     }
 
 }

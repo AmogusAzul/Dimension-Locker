@@ -1,7 +1,5 @@
 package io.github.amogusazul.dimension_locker;
 
-
-import io.github.amogusazul.dimension_locker.platform.NeoForgeCommonRegistry;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 
@@ -17,7 +15,6 @@ public class DimensionLocker {
         NeoForgeCommonRegistry.DATA_COMPONENT_TYPES.register(eventBus);
 
         CommonClass.init();
-        NeoForgeCommonRegistry.ITEMS.register(eventBus);
 
 
     }

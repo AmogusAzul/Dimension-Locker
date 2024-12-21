@@ -20,5 +20,7 @@ public class DimensionLocker {
         CommonClass.init();
         ForgeCommonRegistry.loadRegistries(modEventBus);
 
+
+
     }
 }

@@ -1,4 +1,6 @@
 {
-  "item.dimension_locker.nether_pebble": "Nether Pebble",
-  "item.dimension_locker.end_pebble": "End Pebble"
+  "command.dimension_locker.dimension_locked": "Dimension: %s. was locked.",
+  "command.dimension_locker.dimension_unlocked": "Dimension: %s. is unlocked.",
+  "command.dimension_locker.dimension_islocked": "Dimension: %s, is %s.",
+  "gamerule.operatorCanEnterLockedDimension": "Operator can enter locked dimension"
 }
