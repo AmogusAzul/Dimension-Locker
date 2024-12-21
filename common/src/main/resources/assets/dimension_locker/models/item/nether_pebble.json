@@ -1,7 +1,0 @@
-{
-	"parent": "dimension_locker:item/pebble_base",
-	"textures": {
-		"0": "dimension_locker:item/nether_pebble",
-		"particle": "dimension_locker:item/nether_pebble"
-	}
-}
