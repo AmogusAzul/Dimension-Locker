@@ -37,6 +37,11 @@ public class FabricCommonRegistry implements CommonRegistry {
     }
 
     @Override
+    public boolean reSupplyDataComponent() {
+        return false;
+    }
+
+    @Override
     public void registerCommand(LiteralArgumentBuilder<CommandSourceStack> command) {
         CommandRegistrationCallback.EVENT.register(
                 (dispatcher, registryAccess, environment) -> dispatcher.register(command)

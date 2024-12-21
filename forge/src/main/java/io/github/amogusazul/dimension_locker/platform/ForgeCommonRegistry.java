@@ -8,6 +8,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +21,17 @@ public class ForgeCommonRegistry implements CommonRegistry {
 
     public static List<LiteralArgumentBuilder<CommandSourceStack>> COMMAND_QUEUE = new ArrayList<>();
 
-
+    @Override
+    public <T> RegistryObject<DataComponentType<T>> registerDataComponent(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
+        return DATA_COMPONENT_TYPES.register(name, () -> builderOperator.apply(DataComponentType.builder()).build());
     }
 
     @Override
-    public <T> Supplier<DataComponentType<T>> registerDataComponent(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
-        return DATA_COMPONENT_TYPES.register(name, () -> builderOperator.apply(DataComponentType.builder()).build());
+    public boolean reSupplyDataComponent() {
+        return true;
+    }
+
+    @Override
     public void registerCommand(LiteralArgumentBuilder<CommandSourceStack> command) {
         COMMAND_QUEUE.add(command);
     }

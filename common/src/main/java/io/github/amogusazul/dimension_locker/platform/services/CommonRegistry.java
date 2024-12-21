@@ -9,6 +9,7 @@ import java.util.function.UnaryOperator;
 
 public interface CommonRegistry {
     <T> Supplier<DataComponentType<T>> registerDataComponent(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator);
+    boolean reSupplyDataComponent();
     void registerCommand(LiteralArgumentBuilder<CommandSourceStack> command);
 
 }

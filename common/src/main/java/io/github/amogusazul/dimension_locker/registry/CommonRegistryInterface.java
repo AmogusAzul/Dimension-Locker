@@ -17,4 +17,7 @@ public interface CommonRegistryInterface {
     static void registerCommand(LiteralArgumentBuilder<CommandSourceStack> command){
         Services.COMMON_REGISTRY.registerCommand(command);
     }
+    static boolean reSupplyDataComponent(){
+        return Services.COMMON_REGISTRY.reSupplyDataComponent();
+    }
 }

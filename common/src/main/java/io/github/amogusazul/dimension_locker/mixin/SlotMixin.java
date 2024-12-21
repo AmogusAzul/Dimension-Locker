@@ -63,6 +63,6 @@ public abstract class SlotMixin {
 
     @Unique
     private boolean dimension_locker$CheckIfCantEnterEnderChest(ItemStack stack){
-        return stack.getComponents().has(DimensionLockerDataComponents.CANT_ENTER_ENDER_CHEST);
+        return stack.getComponents().has(DimensionLockerDataComponents.CANT_ENTER_ENDER_CHEST.getType());
     }
 }

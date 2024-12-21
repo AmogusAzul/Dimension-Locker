@@ -3,6 +3,8 @@ package io.github.amogusazul.dimension_locker;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 
+import static io.github.amogusazul.dimension_locker.platform.NeoForgeCommonRegistry.DATA_COMPONENT_TYPES;
+
 @Mod(Constants.MOD_ID)
 public class DimensionLocker {
 
@@ -12,10 +14,10 @@ public class DimensionLocker {
         // to load your mod. You can access NeoForge and Common code in this
         // project.
 
-        NeoForgeCommonRegistry.DATA_COMPONENT_TYPES.register(eventBus);
+
 
         CommonClass.init();
-
+        DATA_COMPONENT_TYPES.register(eventBus);
 
     }
 }

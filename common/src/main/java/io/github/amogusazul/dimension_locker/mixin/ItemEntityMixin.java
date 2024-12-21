@@ -45,7 +45,7 @@ public abstract class ItemEntityMixin {
 
     @Unique
     private boolean dimension_locker$CheckIfIsUnDespawnable(ItemStack stack){
-        return stack.has(DimensionLockerDataComponents.UN_DESPAWNABLE);
+        return stack.has(DimensionLockerDataComponents.UN_DESPAWNABLE.getType());
     }
 }
 

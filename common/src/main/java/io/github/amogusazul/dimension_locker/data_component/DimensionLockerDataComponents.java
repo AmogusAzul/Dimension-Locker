@@ -18,10 +18,22 @@ public class DimensionLockerDataComponents {
                                     builder.persistent(Level.RESOURCE_KEY_CODEC)),
                     CommonRegistryInterface.reSupplyDataComponent()
             );
-    public static final DataComponentType<Unit> CANT_ENTER_ENDER_CHEST =
-            CommonRegistryInterface.registerDataComponent("cant_enter_ender_chest", (DataComponentType.Builder<Unit> builder) -> builder.persistent(Unit.CODEC)).get();
-    public static final DataComponentType<Unit> UN_DESPAWNABLE =
-            CommonRegistryInterface.registerDataComponent("un_despawnable", (DataComponentType.Builder<Unit> builder) -> builder.persistent(Unit.CODEC)).get();
+    public static final TypeProvider<Unit> CANT_ENTER_ENDER_CHEST =
+            new TypeProvider<>(
+                    CommonRegistryInterface.registerDataComponent(
+                            "cant_enter_ender_chest",
+                            (DataComponentType.Builder<Unit> builder) ->
+                                    builder.persistent(Unit.CODEC)),
+                    CommonRegistryInterface.reSupplyDataComponent()
+            );
+    public static final TypeProvider<Unit> UN_DESPAWNABLE =
+            new TypeProvider<>(
+                    CommonRegistryInterface.registerDataComponent(
+                            "un_despawnable",
+                            (DataComponentType.Builder<Unit> builder) ->
+                                    builder.persistent(Unit.CODEC)),
+                    CommonRegistryInterface.reSupplyDataComponent()
+                    );
 
     public static class TypeProvider<T>{
 
