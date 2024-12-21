@@ -4,6 +4,8 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.github.amogusazul.dimension_locker.platform.services.CommonRegistry;
 import io.github.amogusazul.dimension_locker.Constants;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
+import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
@@ -12,6 +14,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.GameRules;
 
 
 import java.util.function.Function;
@@ -48,6 +51,9 @@ public class FabricCommonRegistry implements CommonRegistry {
         );
     }
 
+    @Override
+    public GameRules.Key<GameRules.BooleanValue> registerBooleanGameRule(String name, GameRules.Category category, boolean defaultValue) {
+        return GameRuleRegistry.register(name, category, GameRuleFactory.createBooleanRule(defaultValue));
     }
 
 }

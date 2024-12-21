@@ -4,6 +4,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.github.amogusazul.dimension_locker.platform.Services;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.world.level.GameRules;
 
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -17,6 +18,10 @@ public interface CommonRegistryInterface {
     static void registerCommand(LiteralArgumentBuilder<CommandSourceStack> command){
         Services.COMMON_REGISTRY.registerCommand(command);
     }
+    static GameRules.Key<GameRules.BooleanValue> registerBooleanGameRule(String name, GameRules.Category category, boolean defaultValue){
+        return Services.COMMON_REGISTRY.registerBooleanGameRule(name, category, defaultValue);
+    }
+
     static boolean reSupplyDataComponent(){
         return Services.COMMON_REGISTRY.reSupplyDataComponent();
     }

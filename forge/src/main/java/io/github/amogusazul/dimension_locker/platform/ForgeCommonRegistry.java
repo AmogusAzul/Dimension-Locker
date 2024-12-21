@@ -6,6 +6,7 @@ import io.github.amogusazul.dimension_locker.platform.services.CommonRegistry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.GameRules;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -36,6 +37,9 @@ public class ForgeCommonRegistry implements CommonRegistry {
         COMMAND_QUEUE.add(command);
     }
 
+    @Override
+    public GameRules.Key<GameRules.BooleanValue> registerBooleanGameRule(String name, GameRules.Category category, boolean defaultValue) {
+        return GameRules.register(name, category, GameRules.BooleanValue.create(defaultValue));
     }
 
     public static void loadRegistries(IEventBus eventBus) {

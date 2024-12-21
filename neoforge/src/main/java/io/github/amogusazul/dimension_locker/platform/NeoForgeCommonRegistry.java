@@ -6,6 +6,7 @@ import io.github.amogusazul.dimension_locker.platform.services.CommonRegistry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.GameRules;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -36,5 +37,9 @@ public class NeoForgeCommonRegistry implements CommonRegistry {
         COMMAND_QUEUE.add(command);
     }
 
+    @Override
+    public  GameRules.Key<GameRules.BooleanValue> registerBooleanGameRule(String name, GameRules.Category category, boolean defaultValue) {
+        return GameRules.register(name, category, GameRules.BooleanValue.create(defaultValue));
+    }
 
 }
