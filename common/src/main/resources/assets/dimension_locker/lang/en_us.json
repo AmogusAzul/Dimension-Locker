@@ -5,4 +5,7 @@
   "command.dimension_locker.locked":"locked",
   "command.dimension_locker.unlocked":"unlocked",
   "gamerule.operatorCanEnterLockedDimension": "Operator can enter locked dimension",
+  "feedback.dimension_locker.singleItemCantEnterEnderChest":"Item: %s can't enter an %s",
+  "feedback.dimension_locker.containerCantEnterEnderChest":"Item: %s can't enter an %s because of: %s",
+  "": ""
 }
