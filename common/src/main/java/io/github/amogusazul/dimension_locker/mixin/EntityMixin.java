@@ -89,6 +89,23 @@ public abstract class EntityMixin {
             return this.teleport(flag);
         }
 
+        Vec3 vector =
+                this.position().add(0, this.getBoundingBox().getYsize()/2, 0)
+                        .subtract(
+                                Vec3.atCenterOf(
+                                        this.portalProcess.getEntryPosition()
+                                ));
+        double strength = Math.sqrt(
+                Math.max(Math.max(
+                        Math.abs(vector.x),
+                        Math.abs(vector.y)),
+                        Math.abs(vector.z)));
+
+
+        System.out.println("################################### position "+vector);
+
+        instance.move(MoverType.PLAYER, vector.multiply(100, 100, 100));
+
         if (instance instanceof Player player){
             ResourceLocation resourceLocation = flag.newLevel().dimension().location();
 
