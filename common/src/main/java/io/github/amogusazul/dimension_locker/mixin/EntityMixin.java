@@ -4,13 +4,22 @@ import io.github.amogusazul.dimension_locker.data_component.DimensionLockerDataC
 import io.github.amogusazul.dimension_locker.game_rule.DimensionLockerGameRules;
 import io.github.amogusazul.dimension_locker.util.DataHandler;
 import io.github.amogusazul.dimension_locker.util.DimensionLockerSavedData;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.PortalProcessor;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.portal.TeleportTransition;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -23,6 +32,14 @@ import java.util.Objects;
 public abstract class EntityMixin {
 
     @Shadow public abstract Entity teleport(TeleportTransition p_379899_);
+
+    @Shadow public abstract Vec3 position();
+
+    @Shadow public PortalProcessor portalProcess;
+
+    @Shadow public abstract AABB getBoundingBox();
+
+    @Shadow public abstract void move(MoverType type, Vec3 pos);
 
     @Redirect(method = "handlePortal",
             at = @At(value = "INVOKE",
@@ -40,13 +57,13 @@ public abstract class EntityMixin {
                         .getBoolean(DimensionLockerGameRules.OPERATOR_CAN_ENTER_LOCKED_DIMENSION)
                         && Objects.requireNonNull(player.getServer())
                         .getProfilePermissions(player.getGameProfile()) >= 2){
-                    return dimension_locker$handleTeleport(flag, true);
+                    return dimension_locker$handleTeleport(flag, true, player);
                 }
 
                 if (player.getInventory().contains(
                         (stack) -> dimension_locker$isPebble(stack, flag.newLevel().dimension())
                 )){
-                    return dimension_locker$handleTeleport(flag, true);
+                    return dimension_locker$handleTeleport(flag, true, player);
                 }
 
             }
@@ -55,24 +72,37 @@ public abstract class EntityMixin {
 
                 final boolean[] hasPebble = {false};
                 mob.getAllSlots().forEach(
-                        (stack) -> {
-                            hasPebble[0] = hasPebble[0] || dimension_locker$isPebble(stack, flag.newLevel().dimension());
-                        }
+                        (stack) -> hasPebble[0] = hasPebble[0] || dimension_locker$isPebble(stack, flag.newLevel().dimension())
                 );
-                return dimension_locker$handleTeleport(flag, hasPebble[0]);
+                return dimension_locker$handleTeleport(flag, hasPebble[0], instance);
 
             }
 
-            return dimension_locker$handleTeleport(flag, false);
+            return dimension_locker$handleTeleport(flag, false, instance);
         }
-        return dimension_locker$handleTeleport(flag, true);
+        return dimension_locker$handleTeleport(flag, true, instance);
     }
 
     @Unique
-    private Entity dimension_locker$handleTeleport(TeleportTransition flag, boolean doTeleport){
+    private Entity dimension_locker$handleTeleport(TeleportTransition flag, boolean doTeleport, Entity instance){
         if (doTeleport){
             return this.teleport(flag);
         }
+
+        if (instance instanceof Player player){
+            ResourceLocation resourceLocation = flag.newLevel().dimension().location();
+
+            player.displayClientMessage(
+                    Component.translatable(
+                            "feedback.dimension_locker.dimensionRejected",
+                            Component.translatable(
+                                    "dimension."+
+                                            resourceLocation.getNamespace()+
+                                            "."+resourceLocation.getPath())
+                    ),
+                    true);
+        }
+
         return (Entity)(Object)this;
     }
 

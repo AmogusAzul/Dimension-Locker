@@ -7,5 +7,8 @@
   "gamerule.operatorCanEnterLockedDimension": "Operator can enter locked dimension",
   "feedback.dimension_locker.singleItemCantEnterEnderChest":"Item: %s can't enter an %s",
   "feedback.dimension_locker.containerCantEnterEnderChest":"Item: %s can't enter an %s because of: %s",
+  "feedback.dimension_locker.dimensionRejected": "%s has rejected you.",
+  "dimension.minecraft.the_nether": "The Nether",
+  "dimension.minecraft.the_end": "The End",
   "": ""
 }
