@@ -2,5 +2,7 @@
   "command.dimension_locker.dimension_locked": "Dimension: %s. was locked.",
   "command.dimension_locker.dimension_unlocked": "Dimension: %s. is unlocked.",
   "command.dimension_locker.dimension_islocked": "Dimension: %s, is %s.",
+  "command.dimension_locker.locked":"locked",
+  "command.dimension_locker.unlocked":"unlocked",
   "gamerule.operatorCanEnterLockedDimension": "Operator can enter locked dimension"
 }

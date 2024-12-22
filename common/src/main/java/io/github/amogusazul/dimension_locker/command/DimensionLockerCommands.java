@@ -87,7 +87,10 @@ public class DimensionLockerCommands {
                                             () -> Component.translatable(
                                                     "command.dimension_locker.dimension_islocked",
                                                     level.dimension().location().toString(),
-                                                    (dimensionSD.isLocked() ? "locked" : "unlocked")
+                                                    Component.translatable(dimensionSD.isLocked() ?
+                                                            "command.dimension_locker.locked" :
+                                                            "command.dimension_locker.unlocked"
+                                                    ).getString()
                                             ),
                                             false
                                     );
