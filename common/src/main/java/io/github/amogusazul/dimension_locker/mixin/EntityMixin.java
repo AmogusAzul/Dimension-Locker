@@ -115,8 +115,113 @@ public abstract class EntityMixin {
                     ),
                     true);
         }
+    }
 
-        return (Entity)(Object)this;
+    @Unique
+    private void dimension_locker$pushEntity(Entity e, TeleportTransition flag){
+
+        double PUSH_MAGNITUDE = 1.5;
+
+
+        Vec3 vec = dimension_locker$getNormalizedPushVector(e, flag);
+
+        double absY = Math.abs(vec.y);
+
+        double SIN_OF_ANGLE = Math.sin(Math.toRadians(15));
+
+        double newY = absY < SIN_OF_ANGLE ? Math.copySign(SIN_OF_ANGLE, vec.y) : vec.y;
+
+        Vec3 v = new Vec3(vec.x, newY, vec.z).scale(PUSH_MAGNITUDE);
+
+        e.push(v);
+
+        if (e instanceof ServerPlayer sp) {
+            sp.hurtMarked = true;
+        }
+
+    }
+
+    @Unique
+    private static void dimension_locker$floodFill(BlockPos pos, Direction direction, Set<BlockPos> checked, Predicate<BlockPos> isValid, BiConsumer<BlockPos, Direction> function) {
+
+        pos = pos.relative(direction);
+
+
+
+        if (!isValid.test(pos) || checked.contains(pos)){
+
+            return;
+        }
+
+
+
+        checked.add(pos);
+
+        function.accept(pos, direction);
+
+        for (Direction d : Direction.values()){
+            dimension_locker$floodFill(pos, d, checked, isValid, function);
+        }
+
+    }
+
+    @Unique
+    private static void dimension_locker$floodFillWrapper(BlockPos start, Predicate<BlockPos> predicate, BiConsumer<BlockPos, Direction> function){
+
+        Set<BlockPos> visited = new HashSet<>();
+
+        for (Direction d : Direction.values()) {
+            dimension_locker$floodFill(start, d, visited, predicate, function);
+        }
+    }
+
+    @Unique
+    private Vec3 dimension_locker$getNormalizedPushVector(Entity e, TeleportTransition flag) {
+
+        Direction portalNormal = dimension_locker$getPortalNormal(e, flag);
+        Vec3 dM = e.getDeltaMovement().normalize().subtract(portalNormal.getUnitVec3()).reverse();
+        return portalNormal.getUnitVec3().add(dM).normalize();
+    }
+
+    @Unique
+    private Direction dimension_locker$getPortalNormal(Entity e, TeleportTransition flag){
+
+        Direction portalNormal;
+
+        BlockPos start = this.portalProcess.getEntryPosition();
+        final AABB[] pB = {new AABB(start)}; // Use an array as a mutable wrapper
+
+        Predicate<BlockPos> isPortal = pos -> e.level().getBlockState(pos).getBlock() instanceof Portal p &&
+                e.level() instanceof ServerLevel sl &&
+                flag.newLevel().dimension() == p.getPortalDestination(sl, e, pos).newLevel().dimension();
+
+        dimension_locker$floodFillWrapper(start, isPortal,
+                (pos, dir) -> {
+                    switch (dir) {
+                        case DOWN -> pB[0] = pB[0].setMinY(Math.min(pos.getY(), pB[0].minY));
+                        case UP -> pB[0] = pB[0].setMaxY(Math.max(pos.getY() + 1, pB[0].maxY));
+                        case NORTH -> pB[0] = pB[0].setMinZ(Math.min(pos.getZ(), pB[0].minZ));
+                        case SOUTH -> pB[0] = pB[0].setMaxZ(Math.max(pos.getZ() + 1, pB[0].maxZ));
+                        case WEST -> pB[0] = pB[0].setMinX(Math.min(pos.getX(), pB[0].minX));
+                        case EAST -> pB[0] = pB[0].setMaxX(Math.max(pos.getX() + 1, pB[0].maxX));
+                    }});
+
+        double xSize = pB[0].getXsize();
+        double ySize = pB[0].getYsize();
+        double zSize = pB[0].getZsize();
+        double minSize = Math.min(Math.min(xSize, ySize), zSize);
+
+        if (xSize == ySize && xSize == zSize) {portalNormal = Direction.getApproximateNearest(e.position().subtract(pB[0].getCenter()));}
+        else {
+            Axis axis = (minSize == xSize) ? Axis.X : (minSize == ySize) ? Axis.Y : Axis.Z;
+            double entityAxisPos = e.getBoundingBox().getCenter().get(axis);
+            double min = pB[0].min(axis);
+            double max = pB[0].max(axis);
+            AxisDirection direction = Math.abs(entityAxisPos - max) > Math.abs(entityAxisPos - min) ? AxisDirection.NEGATIVE : AxisDirection.POSITIVE;
+            portalNormal = Direction.fromAxisAndDirection(axis, direction);
+        }
+
+        return portalNormal;
     }
 
     @Unique
