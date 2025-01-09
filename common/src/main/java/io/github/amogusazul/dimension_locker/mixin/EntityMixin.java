@@ -5,18 +5,22 @@ import io.github.amogusazul.dimension_locker.game_rule.DimensionLockerGameRules;
 import io.github.amogusazul.dimension_locker.util.DataHandler;
 import io.github.amogusazul.dimension_locker.util.DimensionLockerSavedData;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
+import net.minecraft.core.Direction.AxisDirection;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.PortalProcessor;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Portal;
 import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -26,20 +30,19 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin {
 
     @Shadow public abstract Entity teleport(TeleportTransition p_379899_);
 
-    @Shadow public abstract Vec3 position();
 
     @Shadow public PortalProcessor portalProcess;
-
-    @Shadow public abstract AABB getBoundingBox();
-
-    @Shadow public abstract void move(MoverType type, Vec3 pos);
 
     @Redirect(method = "handlePortal",
             at = @At(value = "INVOKE",
@@ -89,27 +92,20 @@ public abstract class EntityMixin {
             return this.teleport(flag);
         }
 
-        Vec3 vector =
-                this.position().add(0, this.getBoundingBox().getYsize()/2, 0)
-                        .subtract(
-                                Vec3.atCenterOf(
-                                        this.portalProcess.getEntryPosition()
-                                ));
-        double strength = Math.sqrt(
-                Math.max(Math.max(
-                        Math.abs(vector.x),
-                        Math.abs(vector.y)),
-                        Math.abs(vector.z)));
+        dimension_locker$pushEntity(instance, flag);
 
 
-        System.out.println("################################### position "+vector);
+        dimension_locker$feedbackPlayer(instance, flag);
 
-        instance.move(MoverType.PLAYER, vector.multiply(100, 100, 100));
+        return (Entity)(Object)this;
+    }
 
-        if (instance instanceof Player player){
+    @Unique
+    private void dimension_locker$feedbackPlayer(Entity e, TeleportTransition flag){
+        if (e instanceof Player p){
             ResourceLocation resourceLocation = flag.newLevel().dimension().location();
 
-            player.displayClientMessage(
+            p.displayClientMessage(
                     Component.translatable(
                             "feedback.dimension_locker.dimensionRejected",
                             Component.translatable(
