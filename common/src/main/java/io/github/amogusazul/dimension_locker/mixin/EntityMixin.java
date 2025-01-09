@@ -93,10 +93,10 @@ public abstract class EntityMixin {
             return this.teleport(flag);
         }
 
-        dimension_locker$pushEntity(instance, flag);
-
         dimension_locker$spawnParticles(instance, flag);
 
+
+        dimension_locker$pushEntity(instance, flag);
         dimension_locker$feedbackPlayer(instance, flag);
 
         return (Entity)(Object)this;
@@ -148,7 +148,7 @@ public abstract class EntityMixin {
 
         BlockPos start = this.portalProcess.getEntryPosition();
 
-        int PARTICLES_PER_BLOCK = 4;
+        int PARTICLES_PER_BLOCK = 100;
 
         Predicate<BlockPos> isPortal = pos -> e.level().getBlockState(pos).getBlock() instanceof Portal p &&
                 e.level() instanceof ServerLevel sl &&
@@ -156,28 +156,39 @@ public abstract class EntityMixin {
 
         Direction portalNormal = dimension_locker$getPortalNormal(e, flag);
 
+        Vec3 particleForce = portalNormal.getUnitVec3().scale(1);
+
         dimension_locker$floodFillWrapper(start, isPortal,
                 (pos, dir) -> {
-                    for (int i = 0;i<PARTICLES_PER_BLOCK;i++){
-                        double ranX = e.getRandom().nextDouble();
-                        double ranY = e.getRandom().nextDouble();
-                        double ranZ = e.getRandom().nextDouble();
 
-                        Vec3 particleForce = portalNormal.getUnitVec3().scale(4);
+            if (e.level() instanceof ServerLevel sl){
 
-                        this.level().addParticle(
+                for (ServerPlayer sP : sl.players()) {
 
-                                ParticleTypes.END_ROD,
+                    sl.sendParticles(
+                            sP,
+                            ParticleTypes.REVERSE_PORTAL,
+                            false,
+                            pos.getX()+0.5+(particleForce.x/2),
+                            pos.getY()+0.5+(particleForce.y/2),
+                            pos.getZ()+0.5+(particleForce.z/2),
+                            PARTICLES_PER_BLOCK,
+                            (portalNormal.getAxis() != Axis.X ? 0.5 : 0)+(particleForce.x/2),
+                            (portalNormal.getAxis() != Axis.Y ? 0.5 : 0)+(particleForce.y/2),
+                            (portalNormal.getAxis() != Axis.Z ? 0.5 : 0)+(particleForce.z/2),
+                            0.2
+                    );
 
-                                (portalNormal.getAxis() == Axis.X ? 0.5 : ranX)+pos.getX(),
-                                (portalNormal.getAxis() == Axis.Y ? 0.5 : ranY)+pos.getY(),
-                                (portalNormal.getAxis() == Axis.Z ? 0.5 : ranZ)+pos.getZ(),
-                                particleForce.x,
-                                particleForce.y,
-                                particleForce.z
+                }
+
+                for (int i = 0;i<PARTICLES_PER_BLOCK;i++){
+                    double ranX = e.getRandom().nextDouble();
+                    double ranY = e.getRandom().nextDouble();
+                    double ranZ = e.getRandom().nextDouble();
 
 
-                        );
+
+            }
                     }
                 }
                 );
