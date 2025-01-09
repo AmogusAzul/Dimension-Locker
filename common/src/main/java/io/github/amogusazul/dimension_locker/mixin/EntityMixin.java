@@ -41,6 +41,7 @@ public abstract class EntityMixin {
 
     @Shadow public abstract Entity teleport(TeleportTransition p_379899_);
 
+    @Shadow public abstract Level level();
 
     @Shadow public PortalProcessor portalProcess;
 
@@ -94,6 +95,7 @@ public abstract class EntityMixin {
 
         dimension_locker$pushEntity(instance, flag);
 
+        dimension_locker$spawnParticles(instance, flag);
 
         dimension_locker$feedbackPlayer(instance, flag);
 
@@ -138,6 +140,47 @@ public abstract class EntityMixin {
         if (e instanceof ServerPlayer sp) {
             sp.hurtMarked = true;
         }
+
+    }
+
+    @Unique
+    private void dimension_locker$spawnParticles(Entity e, TeleportTransition flag){
+
+        BlockPos start = this.portalProcess.getEntryPosition();
+
+        int PARTICLES_PER_BLOCK = 4;
+
+        Predicate<BlockPos> isPortal = pos -> e.level().getBlockState(pos).getBlock() instanceof Portal p &&
+                e.level() instanceof ServerLevel sl &&
+                flag.newLevel().dimension() == p.getPortalDestination(sl, e, pos).newLevel().dimension();
+
+        Direction portalNormal = dimension_locker$getPortalNormal(e, flag);
+
+        dimension_locker$floodFillWrapper(start, isPortal,
+                (pos, dir) -> {
+                    for (int i = 0;i<PARTICLES_PER_BLOCK;i++){
+                        double ranX = e.getRandom().nextDouble();
+                        double ranY = e.getRandom().nextDouble();
+                        double ranZ = e.getRandom().nextDouble();
+
+                        Vec3 particleForce = portalNormal.getUnitVec3().scale(4);
+
+                        this.level().addParticle(
+
+                                ParticleTypes.END_ROD,
+
+                                (portalNormal.getAxis() == Axis.X ? 0.5 : ranX)+pos.getX(),
+                                (portalNormal.getAxis() == Axis.Y ? 0.5 : ranY)+pos.getY(),
+                                (portalNormal.getAxis() == Axis.Z ? 0.5 : ranZ)+pos.getZ(),
+                                particleForce.x,
+                                particleForce.y,
+                                particleForce.z
+
+
+                        );
+                    }
+                }
+                );
 
     }
 
