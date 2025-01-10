@@ -14,6 +14,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PortalProcessor;
@@ -94,8 +96,7 @@ public abstract class EntityMixin {
         }
 
         dimension_locker$spawnParticles(instance, flag);
-
-
+        dimension_locker$playSound(instance);
         dimension_locker$pushEntity(instance, flag);
         dimension_locker$feedbackPlayer(instance, flag);
 
@@ -193,6 +194,21 @@ public abstract class EntityMixin {
                 }
                 );
 
+    }
+
+    @Unique
+    private void dimension_locker$playSound(Entity e){
+
+        Level l = e.level();
+        assert e.portalProcess != null;
+        l.playSound(
+                null,
+                e.portalProcess.getEntryPosition(),
+                SoundEvents.ALLAY_DEATH,
+                SoundSource.MASTER,
+                1.3f,
+                0.5f
+                );
     }
 
     @Unique
